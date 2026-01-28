@@ -20,6 +20,7 @@ await build({
       "@malloydata/db-snowflake",
       "@malloydata/db-trino",
       "@google-cloud/storage",
+      "duckdb",
    ],
 });
 
