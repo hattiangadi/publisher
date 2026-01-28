@@ -59,12 +59,16 @@ export class WatchModeController {
          ignoreInitial: true,
       });
       const reloadProject = async () => {
-         // Overwrite the project with it's existing metadata to trigger a re-read
+         // Delete existing project to force full recompilation of all models
+         // Without this, addProject() reuses the existing Project instance
+         // which keeps cached compiled models that don't reflect file changes
          const project = await this.projectStore.getProject(
             req.body.projectName,
             true,
          );
-         await this.projectStore.addProject(project.metadata);
+         const metadata = project.metadata;
+         await this.projectStore.deleteProject(req.body.projectName);
+         await this.projectStore.addProject(metadata);
          logger.info(`Reloaded ${req.body.projectName}`);
       };
 
